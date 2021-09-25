@@ -16,11 +16,7 @@ func testSingleOperations(ctx context.Context, t *testing.T, db dalgo.Database) 
 			}
 			record := dalgo.NewRecord(key, &data)
 			if err := db.Get(ctx, record); err != nil {
-				if dalgo.IsNotFound(err) {
-					if err = db.Delete(ctx, record.Key()); err != nil {
-						t.Errorf("failed to delete: %v", err)
-					}
-				} else {
+				if !dalgo.IsNotFound(err) {
 					t.Errorf("unexpected error: %v", err)
 				}
 			}
