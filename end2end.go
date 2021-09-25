@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func EndToEnd(t *testing.T, db dalgo.Database) {
+func TestDalgoDB(t *testing.T, db dalgo.Database) {
 	if t == nil {
 		panic("t == nil")
 	}
