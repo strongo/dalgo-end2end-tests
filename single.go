@@ -8,7 +8,7 @@ import (
 
 func testSingleOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 	t.Run("single", func(t *testing.T) {
-		key := dalgo.NewKeyWithStrID(E2ETestKind, "r1")
+		key := dalgo.NewKeyWithStrID(E2ETestKind1, "r1")
 		t.Run("get", func(t *testing.T) {
 			data := TestData{
 				StringProp:  "str1",

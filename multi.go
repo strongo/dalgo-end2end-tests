@@ -7,25 +7,32 @@ import (
 )
 
 func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
-	r2Key := dalgo.NewKeyWithStrID(E2ETestKind, "r2")
-	r3Key := dalgo.NewKeyWithStrID(E2ETestKind, "r3")
+	k1r2Key := dalgo.NewKeyWithStrID(E2ETestKind1, "k1r2")
+	k1r3Key := dalgo.NewKeyWithStrID(E2ETestKind1, "k1r3")
+	k2r4Key := dalgo.NewKeyWithStrID(E2ETestKind1, "k2r4")
 	t.Run("SetMulti", func(t *testing.T) {
 		records := []dalgo.Record{
-			dalgo.NewRecord(r2Key, TestData{
+			dalgo.NewRecord(k1r2Key, TestData{
 				StringProp: "s2",
 			}),
-			dalgo.NewRecord(r3Key, TestData{
+			dalgo.NewRecord(k1r3Key, TestData{
 				StringProp: "s3",
+			}),
+			dalgo.NewRecord(k2r4Key, TestData{
+				StringProp: "s4",
 			}),
 		}
 		if err := db.SetMulti(ctx, records); err != nil {
 			t.Errorf("failed to set multiple records at once: %v", err)
 		}
 	})
-	t.Run("DeleteMulti", func(t *testing.T) {
+	t.Run("GetMulti_3_existing_records", func(t *testing.T) {
+
+	})
+	t.Run("DeleteMulti_2_records", func(t *testing.T) {
 		keys := []*dalgo.Key{
-			r2Key,
-			r3Key,
+			k1r2Key,
+			k1r3Key,
 		}
 		if err := db.DeleteMulti(ctx, keys); err != nil {
 			t.Errorf("failed to delete multiple records at once: %v", err)

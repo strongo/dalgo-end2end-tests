@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// TestDalgoDB tests a dalgo DB implementation
 func TestDalgoDB(t *testing.T, db dalgo.Database) {
 	if t == nil {
 		panic("t == nil")
