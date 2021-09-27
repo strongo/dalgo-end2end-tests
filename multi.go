@@ -99,7 +99,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		}
 	})
 	t.Run("update", func(t *testing.T) {
-		data := make([]TestData, 2)
+		data := make([]TestData, 3)
 		const newValue = "UpdateD"
 		updates := []dalgo.Update{
 			{Field: "StringProp", Value: newValue},
@@ -110,7 +110,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		records := []dalgo.Record{
 			dalgo.NewRecord(k1r1Key, &data[0]),
 			dalgo.NewRecord(k1r2Key, &data[1]),
-			dalgo.NewRecord(k2r1Key, &data[1]),
+			dalgo.NewRecord(k2r1Key, &data[3]),
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to get 3 records at once: %v", err)
