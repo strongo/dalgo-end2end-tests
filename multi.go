@@ -37,7 +37,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 	t.Run("SetMulti", func(t *testing.T) {
 		records := []dalgo.Record{
 			dalgo.NewRecord(k1r1Key, TestData{
-				StringProp: "k1s1str",
+				StringProp: "k1r1str",
 			}),
 			dalgo.NewRecord(k1r2Key, TestData{
 				StringProp: "k1r2str",
@@ -63,10 +63,10 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		if expected, actual := "k1r1str", data[0].StringProp; actual != expected {
 			t.Errorf("expected %v got %v", expected, actual)
 		}
-		if expected, actual := "k1r2str", data[0].StringProp; actual != expected {
+		if expected, actual := "k1r2str", data[1].StringProp; actual != expected {
 			t.Errorf("expected %v got %v", expected, actual)
 		}
-		if expected, actual := "k2r1str", data[0].StringProp; actual != expected {
+		if expected, actual := "k2r1str", data[2].StringProp; actual != expected {
 			t.Errorf("expected %v got %v", expected, actual)
 		}
 	})
