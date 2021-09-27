@@ -14,7 +14,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 
 	deleteAllRecords := func(ctx context.Context, t *testing.T, db dalgo.Database, keys []*dalgo.Key) {
 		if err := db.DeleteMulti(ctx, keys); err != nil {
-			t.Fatalf("failed to delete multiple records at once: %v", err)
+			t.Fatalf("failed to delete multiple records at once: %T: %v", err, err)
 		}
 	}
 	t.Run("1st_initial_delete", func(t *testing.T) {
@@ -156,10 +156,9 @@ func recordsMustExist(t *testing.T, records []dalgo.Record) {
 
 func recordsMustNotExist(t *testing.T, records []dalgo.Record) {
 	for _, record := range records {
-		if record.Exists() {
-			t.Errorf("record expectd to NOT exist, key: %v", record.Key())
-		}
-		if err := record.Error(); !dalgo.IsNotFound(err) {
+		if err := record.Error(); err == nil {
+			t.Error("record expected to have NOT FOUND error but returned nil")
+		} else if !dalgo.IsNotFound(err) {
 			t.Errorf("record has unexpected error: %v", err)
 		}
 	}
