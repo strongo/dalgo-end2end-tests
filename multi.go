@@ -61,13 +61,13 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		}
 		recordsMustExist(t, records)
 		if expected, actual := "k1r1str", data[0].StringProp; actual != expected {
-			t.Errorf("expected %v got %v", expected, actual)
+			t.Errorf("expected %v got %v, err: %v", expected, actual, records[0].Error())
 		}
 		if expected, actual := "k1r2str", data[1].StringProp; actual != expected {
-			t.Errorf("expected %v got %v", expected, actual)
+			t.Errorf("expected %v got %v, err: %v", expected, actual, records[0].Error())
 		}
 		if expected, actual := "k2r1str", data[2].StringProp; actual != expected {
-			t.Errorf("expected %v got %v", expected, actual)
+			t.Errorf("expected %v got %v, err: %v", expected, actual, records[0].Error())
 		}
 	})
 	t.Run("GetMulti_2_existing_2_missing_records", func(t *testing.T) {
@@ -87,10 +87,10 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 			}
 		}
 		if expected, actual := "k1r1str", data[0].StringProp; actual != expected {
-			t.Errorf("expected %v got %v", expected, actual)
+			t.Errorf("expected %v got %v, err: %v", expected, actual, records[0].Error())
 		}
 		if expected, actual := "k1r2str", data[1].StringProp; actual != expected {
-			t.Errorf("expected %v got %v", expected, actual)
+			t.Errorf("expected %v got %v, err: %v", expected, actual, records[1].Error())
 		}
 		for i := 2; i < 4; i++ {
 			if records[i].Exists() {
