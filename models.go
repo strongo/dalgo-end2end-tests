@@ -9,6 +9,8 @@ import (
 const (
 	// E2ETestKind1 defines table or collection name for an entity to be stored in
 	E2ETestKind1 = "E2ETest1"
+	// E2ETestKind2 defines table or collection name for an entity to be stored in
+	E2ETestKind2 = "E2ETest2"
 )
 
 // TestData describes a test entity to be stored in a DALgo database
