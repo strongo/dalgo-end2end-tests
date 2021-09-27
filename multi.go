@@ -98,7 +98,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 			}
 		}
 	})
-	t.Run("update", func(t *testing.T) {
+	t.Run("update_2_records", func(t *testing.T) {
 		data := make([]TestData, 3)
 		const newValue = "UpdateD"
 		updates := []dalgo.Update{
@@ -122,7 +122,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		if actual := data[1].StringProp; actual != newValue {
 			t.Errorf("record expected to have StringProp as '%v' but got '%v', key: %v", newValue, actual, records[1].Key())
 		}
-		if actual := data[2].StringProp; actual != newValue {
+		if actual := data[2].StringProp; actual != "k2r1str" {
 			t.Errorf("record expected to have StringProp as '%v' but got '%v', key: %v", newValue, actual, records[2].Key())
 		}
 	})
