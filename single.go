@@ -8,7 +8,13 @@ import (
 
 func testSingleOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 	t.Run("single", func(t *testing.T) {
-		key := dalgo.NewKeyWithStrID(E2ETestKind1, "r1")
+		const id = "r0"
+		key := dalgo.NewKeyWithStrID(E2ETestKind1, id)
+		t.Run("delete", func(t *testing.T) {
+			if err := db.Delete(ctx, key); err != nil {
+				t.Errorf("Failed to delete: %v", err)
+			}
+		})
 		t.Run("get", func(t *testing.T) {
 			data := TestData{
 				StringProp:  "str1",
