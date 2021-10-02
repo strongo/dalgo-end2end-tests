@@ -24,9 +24,9 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		deleteAllRecords(ctx, t, db, allKeys)
 	})
 	t.Run("get_3_non_existing_records", func(t *testing.T) {
-		records := make([]dalgo.Record, len(allKeys))
-		for i, key := range allKeys {
-			records[i] = dalgo.NewRecord(key)
+		records := make([]dalgo.Record, 3)
+		for i := 0; i < 3; i++ {
+			records[i] = dalgo.NewRecord(dalgo.NewKey("NonExistingKind", dalgo.WithID(i)))
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to get multiple records at once: %v", err)
