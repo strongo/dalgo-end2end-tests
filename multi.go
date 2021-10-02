@@ -53,7 +53,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		data := make([]TestData, len(allKeys))
 		records := make([]dalgo.Record, len(allKeys))
 		for i := range records {
-			records[i] = dalgo.NewRecord(allKeys[i])
+			records[i] = dalgo.NewRecordWithData(allKeys[i], &data[i])
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to get multiple records at once: %v", err)
