@@ -51,24 +51,46 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		}
 	})
 	t.Run("GetMulti_3_existing_records", func(t *testing.T) {
-		data := make([]TestData, len(allKeys))
+		var data []TestData
 		records := make([]dalgo.Record, len(allKeys))
-		for i := range records {
-			records[i] = dalgo.NewRecordWithData(allKeys[i], &data[i])
+		assetProps := func(t *testing.T) {
+			recordsMustExist(t, records)
+			assertStringProp := func(i int, record dalgo.Record) {
+				id := record.Key().ID.(string)
+				if expected, actual := id+"str", data[i].StringProp; actual != expected {
+					t.Errorf("expected %v got %v, err: %v", expected, actual, record.Error())
+				}
+			}
+			for i, record := range records {
+				assertStringProp(i, record)
+			}
 		}
-		if err := db.GetMulti(ctx, records); err != nil {
-			t.Fatalf("failed to get multiple records at once: %v", err)
-		}
-		recordsMustExist(t, records)
-		if expected, actual := "k1r1str", data[0].StringProp; actual != expected {
-			t.Errorf("expected %v got %v, err: %v", expected, actual, records[0].Error())
-		}
-		if expected, actual := "k1r2str", data[1].StringProp; actual != expected {
-			t.Errorf("expected %v got %v, err: %v", expected, actual, records[0].Error())
-		}
-		if expected, actual := "k2r1str", data[2].StringProp; actual != expected {
-			t.Errorf("expected %v got %v, err: %v", expected, actual, records[0].Error())
-		}
+		t.Run("using_records_with_data", func(t *testing.T) {
+			data = make([]TestData, len(allKeys))
+			for i := range records {
+				records[i] = dalgo.NewRecordWithData(allKeys[i], &data[i])
+			}
+			if err := db.GetMulti(ctx, records); err != nil {
+				t.Fatalf("failed to get multiple records at once: %v", err)
+			}
+			assetProps(t)
+		})
+		t.Run("using_DataTo", func(t *testing.T) {
+			for i := range records {
+				records[i] = dalgo.NewRecord(allKeys[i])
+			}
+			if err := db.GetMulti(ctx, records); err != nil {
+				t.Fatalf("failed to get multiple records at once: %v", err)
+			}
+			recordsMustExist(t, records)
+			data = make([]TestData, len(allKeys))
+			for i, record := range records {
+				if err := record.DataTo(&data[i]); err != nil {
+					t.Fatalf("failed to record #%v", i+1)
+				}
+			}
+			assetProps(t)
+		})
 	})
 	t.Run("GetMulti_2_existing_2_missing_records_using_DataTo", func(t *testing.T) {
 		records := []dalgo.Record{
