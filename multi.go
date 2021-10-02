@@ -2,6 +2,7 @@ package end2end
 
 import (
 	"context"
+	"fmt"
 	"github.com/strongo/dalgo"
 	"testing"
 )
@@ -26,7 +27,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 	t.Run("get_3_non_existing_records", func(t *testing.T) {
 		records := make([]dalgo.Record, 3)
 		for i := 0; i < 3; i++ {
-			records[i] = dalgo.NewRecord(dalgo.NewKey("NonExistingKind", dalgo.WithID(i)))
+			records[i] = dalgo.NewRecord(dalgo.NewKey("NonExistingKind", dalgo.WithStringID(fmt.Sprintf("non_existing_id_%v", i))))
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to get multiple records at once: %v", err)
