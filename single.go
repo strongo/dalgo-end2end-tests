@@ -20,7 +20,7 @@ func testSingleOperations(ctx context.Context, t *testing.T, db dalgo.Database) 
 				StringProp:  "str1",
 				IntegerProp: 1,
 			}
-			record := dalgo.NewRecord(key, &data)
+			record := dalgo.NewRecordWithData(key, &data)
 			if err := db.Get(ctx, record); err != nil {
 				if !dalgo.IsNotFound(err) {
 					t.Errorf("unexpected error: %v", err)
@@ -33,7 +33,7 @@ func testSingleOperations(ctx context.Context, t *testing.T, db dalgo.Database) 
 					StringProp:  "str1",
 					IntegerProp: 1,
 				}
-				record := dalgo.NewRecord(key, &data)
+				record := dalgo.NewRecordWithData(key, &data)
 				err := db.Insert(ctx, record)
 				if err != nil {
 					t.Errorf("got unexpected error: %v", err)

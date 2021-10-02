@@ -24,10 +24,9 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		deleteAllRecords(ctx, t, db, allKeys)
 	})
 	t.Run("get_3_non_existing_records", func(t *testing.T) {
-		data := make([]TestData, len(allKeys))
 		records := make([]dalgo.Record, len(allKeys))
-		for i := range records {
-			records[i] = dalgo.NewRecord(allKeys[i], &data[i])
+		for i, key := range allKeys {
+			records[i] = dalgo.NewRecord(key)
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to get multiple records at once: %v", err)
@@ -36,13 +35,13 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 	})
 	t.Run("SetMulti", func(t *testing.T) {
 		records := []dalgo.Record{
-			dalgo.NewRecord(k1r1Key, TestData{
+			dalgo.NewRecordWithData(k1r1Key, TestData{
 				StringProp: "k1r1str",
 			}),
-			dalgo.NewRecord(k1r2Key, TestData{
+			dalgo.NewRecordWithData(k1r2Key, TestData{
 				StringProp: "k1r2str",
 			}),
-			dalgo.NewRecord(k2r1Key, TestData{
+			dalgo.NewRecordWithData(k2r1Key, TestData{
 				StringProp: "k2r1str",
 			}),
 		}
@@ -54,7 +53,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		data := make([]TestData, len(allKeys))
 		records := make([]dalgo.Record, len(allKeys))
 		for i := range records {
-			records[i] = dalgo.NewRecord(allKeys[i], &data[i])
+			records[i] = dalgo.NewRecord(allKeys[i])
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to get multiple records at once: %v", err)
@@ -73,10 +72,10 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 	t.Run("GetMulti_2_existing_2_missing_records", func(t *testing.T) {
 		data := make([]TestData, 4)
 		records := []dalgo.Record{
-			dalgo.NewRecord(k1r1Key, &data[0]),
-			dalgo.NewRecord(k1r2Key, &data[1]),
-			dalgo.NewRecord(dalgo.NewKeyWithStrID(E2ETestKind1, "k1r9"), &data[2]),
-			dalgo.NewRecord(dalgo.NewKeyWithStrID(E2ETestKind2, "k2r9"), &data[3]),
+			dalgo.NewRecordWithData(k1r1Key, &data[0]),
+			dalgo.NewRecordWithData(k1r2Key, &data[1]),
+			dalgo.NewRecordWithData(dalgo.NewKeyWithStrID(E2ETestKind1, "k1r9"), &data[2]),
+			dalgo.NewRecordWithData(dalgo.NewKeyWithStrID(E2ETestKind2, "k2r9"), &data[3]),
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to set multiple records at once: %v", err)
@@ -86,11 +85,21 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 				t.Errorf("record expectd to exist, key: %v", records[0].Key())
 			}
 		}
-		if expected, actual := "k1r1str", data[0].StringProp; actual != expected {
-			t.Errorf("expected %v got %v, err: %v", expected, actual, records[0].Error())
+		checkPropValue := func(r dalgo.Record, expected string) error {
+			data := new(TestData)
+			if err := r.DataTo(data); err != nil {
+				return err
+			}
+			if data.StringProp != expected {
+				t.Errorf("expected %v got %v, err: %v", expected, data.StringProp, r.Error())
+			}
+			return nil
 		}
-		if expected, actual := "k1r2str", data[1].StringProp; actual != expected {
-			t.Errorf("expected %v got %v, err: %v", expected, actual, records[1].Error())
+		if err := checkPropValue(records[0], "k1r1str"); err != nil {
+			t.Error(err)
+		}
+		if err := checkPropValue(records[1], "k1r2str"); err != nil {
+			t.Error(err)
 		}
 		for i := 2; i < 4; i++ {
 			if records[i].Exists() {
@@ -108,9 +117,9 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 			t.Fatalf("failed to update 2 records at once: %v", err)
 		}
 		records := []dalgo.Record{
-			dalgo.NewRecord(k1r1Key, &data[0]),
-			dalgo.NewRecord(k1r2Key, &data[1]),
-			dalgo.NewRecord(k2r1Key, &data[2]),
+			dalgo.NewRecord(k1r1Key),
+			dalgo.NewRecord(k1r2Key),
+			dalgo.NewRecord(k2r1Key),
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to get 3 records at once: %v", err)
@@ -131,7 +140,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		data := make([]TestData, len(allKeys))
 		records := make([]dalgo.Record, len(allKeys))
 		for i := range records {
-			records[i] = dalgo.NewRecord(allKeys[i], &data[i])
+			records[i] = dalgo.NewRecordWithData(allKeys[i], &data[i])
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to get multiple records at once: %v", err)
@@ -153,10 +162,10 @@ func recordsMustExist(t *testing.T, records []dalgo.Record) {
 
 func recordsMustNotExist(t *testing.T, records []dalgo.Record) {
 	for _, record := range records {
-		if err := record.Error(); err == nil {
-			t.Error("record expected to have NOT FOUND error but returned nil")
-		} else if !dalgo.IsNotFound(err) {
+		if err := record.Error(); err != nil {
 			t.Errorf("record has unexpected error: %v", err)
+		} else if !record.Exists() {
+			t.Error("record.Exists() expected to be false, got true")
 		}
 	}
 }
