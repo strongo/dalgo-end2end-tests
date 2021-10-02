@@ -69,13 +69,12 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 			t.Errorf("expected %v got %v, err: %v", expected, actual, records[0].Error())
 		}
 	})
-	t.Run("GetMulti_2_existing_2_missing_records", func(t *testing.T) {
-		data := make([]TestData, 4)
+	t.Run("GetMulti_2_existing_2_missing_records_using_DataTo", func(t *testing.T) {
 		records := []dalgo.Record{
-			dalgo.NewRecordWithData(k1r1Key, &data[0]),
-			dalgo.NewRecordWithData(k1r2Key, &data[1]),
-			dalgo.NewRecordWithData(dalgo.NewKeyWithStrID(E2ETestKind1, "k1r9"), &data[2]),
-			dalgo.NewRecordWithData(dalgo.NewKeyWithStrID(E2ETestKind2, "k2r9"), &data[3]),
+			dalgo.NewRecord(k1r1Key),
+			dalgo.NewRecord(k1r2Key),
+			dalgo.NewRecord(dalgo.NewKeyWithStrID(E2ETestKind1, "k1r9")),
+			dalgo.NewRecord(dalgo.NewKeyWithStrID(E2ETestKind2, "k2r9")),
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to set multiple records at once: %v", err)
