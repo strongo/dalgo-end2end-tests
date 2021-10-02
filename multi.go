@@ -164,7 +164,7 @@ func recordsMustNotExist(t *testing.T, records []dalgo.Record) {
 	for _, record := range records {
 		if err := record.Error(); err != nil {
 			t.Errorf("record has unexpected error: %v", err)
-		} else if !record.Exists() {
+		} else if record.Exists() {
 			t.Error("record.Exists() expected to be false, got true")
 		}
 	}
