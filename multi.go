@@ -116,9 +116,9 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 			t.Fatalf("failed to update 2 records at once: %v", err)
 		}
 		records := []dalgo.Record{
-			dalgo.NewRecord(k1r1Key),
-			dalgo.NewRecord(k1r2Key),
-			dalgo.NewRecord(k2r1Key),
+			dalgo.NewRecordWithData(k1r1Key, &data[0]),
+			dalgo.NewRecordWithData(k1r2Key, &data[1]),
+			dalgo.NewRecordWithData(k2r1Key, &data[2]),
 		}
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to get 3 records at once: %v", err)
