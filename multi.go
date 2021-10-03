@@ -102,11 +102,8 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		if err := db.GetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to set multiple records at once: %v", err)
 		}
-		for i := 0; i < 2; i++ {
-			if !records[i].Exists() {
-				t.Errorf("record expectd to exist, key: %v", records[0].Key())
-			}
-		}
+		recordsMustExist(t, records[:2])
+		recordsMustNotExist(t, records[2:])
 		checkPropValue := func(r dalgo.Record, expected string) error {
 			data := new(TestData)
 			if err := r.DataTo(data); err != nil {
@@ -174,10 +171,10 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 func recordsMustExist(t *testing.T, records []dalgo.Record) {
 	for _, record := range records {
 		if err := record.Error(); err != nil {
-			t.Errorf("record has unexpected error: %v", err)
+			t.Errorf("not able to check record for existence as it has unexpected error: %v", err)
 		}
 		if !record.Exists() {
-			t.Errorf("record expectd to exist, key: %v", record.Key())
+			t.Errorf("record was expected to exist, key: %v", record.Key())
 		}
 	}
 }
