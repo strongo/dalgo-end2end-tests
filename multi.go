@@ -15,7 +15,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 
 	deleteAllRecords := func(ctx context.Context, t *testing.T, db dalgo.Database, keys []*dalgo.Key) {
 		if err := db.DeleteMulti(ctx, keys); err != nil {
-			t.Fatalf("failed to delete multiple records at once: %T: %v", err, err)
+			t.Fatalf("failed at DeleteMulti(ctx, keys) for %v records: %v", len(keys), err)
 		}
 	}
 	t.Run("1st_initial_delete", func(t *testing.T) {
@@ -159,7 +159,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 	})
 	t.Run("cleanup_delete", func(t *testing.T) {
 		deleteAllRecords(ctx, t, db, allKeys)
-		data := make([]TestData, len(allKeys))
+		data := make([]struct{}, len(allKeys))
 		records := make([]dalgo.Record, len(allKeys))
 		for i := range records {
 			records[i] = dalgo.NewRecordWithData(allKeys[i], &data[i])
