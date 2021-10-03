@@ -185,11 +185,12 @@ func recordsMustExist(t *testing.T, records []dalgo.Record) {
 
 func recordsMustNotExist(t *testing.T, records []dalgo.Record) {
 	t.Helper()
-	for _, record := range records {
+	for i, record := range records {
 		if err := record.Error(); err != nil {
-			t.Errorf("record has unexpected error: %v", err)
+			t.Errorf("record with key=[%v] has unexpected error: %v", record.Key(), err)
 		} else if record.Exists() {
-			t.Error("record.Exists() expected to be false, got true")
+			t.Errorf("for record #%v of %v Exists() returned ture, but expected true; key: %v",
+				i, len(records), record.Key())
 		}
 	}
 }
