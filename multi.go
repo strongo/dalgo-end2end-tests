@@ -35,16 +35,15 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		recordsMustNotExist(t, records)
 	})
 	t.Run("SetMulti", func(t *testing.T) {
+		newRecord := func(key *dalgo.Key) dalgo.Record {
+			return dalgo.NewRecordWithData(key, TestData{
+				StringProp: fmt.Sprintf("%vstr", key.ID),
+			})
+		}
 		records := []dalgo.Record{
-			dalgo.NewRecordWithData(k1r1Key, TestData{
-				StringProp: "k1r1str",
-			}),
-			dalgo.NewRecordWithData(k1r2Key, TestData{
-				StringProp: "k1r2str",
-			}),
-			dalgo.NewRecordWithData(k2r1Key, TestData{
-				StringProp: "k2r1str",
-			}),
+			newRecord(k1r1Key),
+			newRecord(k1r2Key),
+			newRecord(k2r1Key),
 		}
 		if err := db.SetMulti(ctx, records); err != nil {
 			t.Fatalf("failed to set multiple records at once: %v", err)
@@ -58,7 +57,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 			assertStringProp := func(i int, record dalgo.Record) {
 				id := record.Key().ID.(string)
 				if expected, actual := id+"str", data[i].StringProp; actual != expected {
-					t.Errorf("expected %v got %v, err: %v", expected, actual, record.Error())
+					t.Errorf("field StringProp was expected to have value '%v' got '%v'", expected, actual)
 				}
 			}
 			for i, record := range records {
