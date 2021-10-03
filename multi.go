@@ -172,6 +172,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 }
 
 func recordsMustExist(t *testing.T, records []dalgo.Record) {
+	t.Helper()
 	for _, record := range records {
 		if err := record.Error(); err != nil {
 			t.Errorf("not able to check record for existence as it has unexpected error: %v", err)
@@ -183,6 +184,7 @@ func recordsMustExist(t *testing.T, records []dalgo.Record) {
 }
 
 func recordsMustNotExist(t *testing.T, records []dalgo.Record) {
+	t.Helper()
 	for _, record := range records {
 		if err := record.Error(); err != nil {
 			t.Errorf("record has unexpected error: %v", err)
