@@ -26,6 +26,8 @@ github.com/strongo/dalgo v0.0.0-20211003195636-b10289cc91b7 h1:GDynkQD9vMBVpLrXX
 github.com/strongo/dalgo v0.0.0-20211003195636-b10289cc91b7/go.mod h1:2cen3Tk4Vjn+HTs42sZykv9RakPi4jOhbTRVqJ83yqQ=
 github.com/strongo/dalgo v0.0.0-20211003200228-1f1e6bc987b1 h1:gm4Agm3j6W+ODOWBBuwbo7s2LKTeKW2Dg6MByt3+MB0=
 github.com/strongo/dalgo v0.0.0-20211003200228-1f1e6bc987b1/go.mod h1:2cen3Tk4Vjn+HTs42sZykv9RakPi4jOhbTRVqJ83yqQ=
+github.com/strongo/dalgo v0.0.0-20211003200945-8aa966acb238 h1:COgtpHkU3aWfOBmVB9FX6PKZby+F3zkopQ/lX8v+RYQ=
+github.com/strongo/dalgo v0.0.0-20211003200945-8aa966acb238/go.mod h1:2cen3Tk4Vjn+HTs42sZykv9RakPi4jOhbTRVqJ83yqQ=
 github.com/strongo/random v0.0.0-20201120164511-f20cfe28165d h1:I8qa7ggQ5RT+hO5gTTaBtS8ZEvbsBIik//AdM4dZL4g=
 github.com/strongo/random v0.0.0-20201120164511-f20cfe28165d/go.mod h1:b5FiRTvklOIQI/iX+4qfwtK7Jrs+9KTZFn1dP9iX26o=
 github.com/strongo/validation v0.0.0-20210908182457-7acc8bdbeffd h1:hvHVKVARPjItp1EQxTk0v3SxE8fICA3n0s2iVeejhOU=
