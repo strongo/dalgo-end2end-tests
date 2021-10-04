@@ -94,7 +94,7 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
 		//	assetProps(t)
 		//})
 	})
-	t.Run("GetMulti_2_existing_2_missing_records_using_DataTo", func(t *testing.T) {
+	t.Run("GetMulti_2_existing_2_missing_records", func(t *testing.T) {
 		keys := []*dalgo.Key{
 			k1r1Key,
 			k1r2Key,
