@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/strongo/dalgo v0.0.0-20211007202621-557267c5c7b2 // indirect
+	github.com/strongo/dalgo v0.0.0-20211007204501-5e9ea7667171 // indirect
 	github.com/strongo/random v0.0.0-20201120164511-f20cfe28165d // indirect
 	github.com/strongo/validation v0.0.0-20210908182457-7acc8bdbeffd // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
