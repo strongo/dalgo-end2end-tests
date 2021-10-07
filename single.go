@@ -2,14 +2,14 @@ package end2end
 
 import (
 	"context"
-	"github.com/strongo/dalgo"
+	"github.com/strongo/dalgo/dal"
 	"testing"
 )
 
-func testSingleOperations(ctx context.Context, t *testing.T, db dalgo.Database) {
+func testSingleOperations(ctx context.Context, t *testing.T, db dal.Database) {
 	t.Run("single", func(t *testing.T) {
 		const id = "r0"
-		key := dalgo.NewKeyWithStrID(E2ETestKind1, id)
+		key := dal.NewKeyWithStrID(E2ETestKind1, id)
 		t.Run("delete", func(t *testing.T) {
 			if err := db.Delete(ctx, key); err != nil {
 				t.Errorf("Failed to delete: %v", err)
@@ -20,9 +20,9 @@ func testSingleOperations(ctx context.Context, t *testing.T, db dalgo.Database) 
 				StringProp:  "str1",
 				IntegerProp: 1,
 			}
-			record := dalgo.NewRecordWithData(key, &data)
+			record := dal.NewRecordWithData(key, &data)
 			if err := db.Get(ctx, record); err != nil {
-				if !dalgo.IsNotFound(err) {
+				if !dal.IsNotFound(err) {
 					t.Errorf("unexpected error: %v", err)
 				}
 			}
@@ -33,7 +33,7 @@ func testSingleOperations(ctx context.Context, t *testing.T, db dalgo.Database) 
 					StringProp:  "str1",
 					IntegerProp: 1,
 				}
-				record := dalgo.NewRecordWithData(key, &data)
+				record := dal.NewRecordWithData(key, &data)
 				err := db.Insert(ctx, record)
 				if err != nil {
 					t.Errorf("got unexpected error: %v", err)

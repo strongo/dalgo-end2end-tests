@@ -2,13 +2,13 @@ package end2end
 
 import (
 	"context"
-	"github.com/strongo/dalgo"
+	"github.com/strongo/dalgo/dal"
 	"sync"
 	"testing"
 )
 
 // TestDalgoDB tests a dalgo DB implementation
-func TestDalgoDB(t *testing.T, db dalgo.Database) {
+func TestDalgoDB(t *testing.T, db dal.Database) {
 	if t == nil {
 		panic("t == nil")
 	}
