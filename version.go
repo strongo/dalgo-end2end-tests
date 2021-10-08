@@ -1,4 +1,4 @@
 package end2end
 
 // Version indicates version of a package
-const Version = "0.0.1"
+const Version = "0.0.2"
