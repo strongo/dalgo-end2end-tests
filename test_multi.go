@@ -14,7 +14,10 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dal.Database) {
 	allKeys := []*dal.Key{k1r1Key, k1r2Key, k2r1Key}
 
 	deleteAllRecords := func(ctx context.Context, t *testing.T, db dal.Database, keys []*dal.Key) {
-		if err := db.DeleteMulti(ctx, keys); err != nil {
+		err := db.RunReadwriteTransaction(ctx, func(ctx context.Context, tx dal.ReadwriteTransaction) error {
+			return tx.DeleteMulti(ctx, keys)
+		})
+		if err != nil {
 			t.Fatalf("failed at DeleteMulti(ctx, keys) for %v records: %v", len(keys), err)
 		}
 	}
@@ -48,7 +51,10 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dal.Database) {
 			newRecord(k1r2Key),
 			newRecord(k2r1Key),
 		}
-		if err := db.SetMulti(ctx, records); err != nil {
+		err := db.RunReadwriteTransaction(ctx, func(ctx context.Context, tx dal.ReadwriteTransaction) error {
+			return tx.SetMulti(ctx, records)
+		})
+		if err != nil {
 			t.Fatalf("failed to set multiple records at once: %v", err)
 		}
 	})
@@ -135,7 +141,10 @@ func testMultiOperations(ctx context.Context, t *testing.T, db dal.Database) {
 		updates := []dal.Update{
 			{Field: "StringProp", Value: newValue},
 		}
-		if err := db.UpdateMulti(ctx, []*dal.Key{k1r1Key, k1r2Key}, updates); err != nil {
+		err := db.RunReadwriteTransaction(ctx, func(ctx context.Context, tx dal.ReadwriteTransaction) error {
+			return tx.UpdateMulti(ctx, []*dal.Key{k1r1Key, k1r2Key}, updates)
+		})
+		if err != nil {
 			t.Fatalf("failed to update 2 records at once: %v", err)
 		}
 		records := []dal.Record{

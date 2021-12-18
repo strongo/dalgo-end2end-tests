@@ -11,7 +11,10 @@ func testSingleOperations(ctx context.Context, t *testing.T, db dal.Database) {
 		const id = "r0"
 		key := dal.NewKeyWithStrID(E2ETestKind1, id)
 		t.Run("delete", func(t *testing.T) {
-			if err := db.Delete(ctx, key); err != nil {
+			err := db.RunReadwriteTransaction(ctx, func(ctx context.Context, tx dal.ReadwriteTransaction) error {
+				return tx.Delete(ctx, key)
+			})
+			if err != nil {
 				t.Errorf("Failed to delete: %v", err)
 			}
 		})
@@ -34,14 +37,19 @@ func testSingleOperations(ctx context.Context, t *testing.T, db dal.Database) {
 					IntegerProp: 1,
 				}
 				record := dal.NewRecordWithData(key, &data)
-				err := db.Insert(ctx, record)
+				err := db.RunReadwriteTransaction(ctx, func(ctx context.Context, tx dal.ReadwriteTransaction) error {
+					return tx.Insert(ctx, record)
+				})
 				if err != nil {
 					t.Errorf("got unexpected error: %v", err)
 				}
 			})
 		})
 		t.Run("delete", func(t *testing.T) {
-			if err := db.Delete(ctx, key); err != nil {
+			err := db.RunReadwriteTransaction(ctx, func(ctx context.Context, tx dal.ReadwriteTransaction) error {
+				return tx.Delete(ctx, key)
+			})
+			if err != nil {
 				t.Errorf("Failed to delete: %v", err)
 			}
 		})
