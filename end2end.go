@@ -35,5 +35,14 @@ func TestDalgoDB(t *testing.T, db dal.Database) {
 		})
 		wg.Done()
 	}()
+
+	wg.Add(1)
+	go func() {
+		t.Run("query", func(t *testing.T) {
+			testQueryOperations(ctx, t, db)
+		})
+		wg.Done()
+	}()
+
 	wg.Wait()
 }
